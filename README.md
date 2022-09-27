@@ -1,0 +1,1 @@
+# Diyagram açmak için;
