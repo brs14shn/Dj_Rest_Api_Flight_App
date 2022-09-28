@@ -1,1 +1,478 @@
-# Diyagram açmak için;
+# DJANGO-FLIGHT-PROJECT
+
+## ✏ INITIAL SETUP ✏
+
+```bash
+# CREATING VIRTUAL ENVIRONMENT
+# windows 👇
+python -m venv env
+# linux / Mac OS 👇
+vitualenv env
+
+# ACTIVATING ENVIRONMENT
+# windows 👇
+source env/Scripts/activate
+# linux / Mac OS 👇
+source env/bin/activate
+
+# PACKAGE INSTALLATION
+# if pip does not work try pip3 in linux/Mac OS
+pip install djangorestframework
+pip freeze > requirements.txt
+django-admin startproject main .
+# alternatively python -m pip install django
+pip install python-decouple
+django-admin --version
+```
+
+```bash
+# 💨 If you already have a requirement.txt file, you can install the packages in the file
+# 💨 by entering the following commands respectively in the terminal 👇
+1-python -m venv env
+2-source env/Scripts/activate
+3-pip install -r requirements.txt 🚀
+4-python.exe -m pip install --upgrade pip
+5-python manage.py migrate
+6-python manage.py createsuperuser
+7-python manage.py runserver
+```
+## 👇 Secure your project
+## 🚩 .gitignore
+
+✔ Add a gitignore file at same level as env folder, and check that it includes .env and /env lines.
+
+🔹 Do that before adding your files to staging area, else you will need extra work to unstage files to be able to ignore them.
+
+🔹 [On this page](https://www.toptal.com/developers/gitignore) you can create "gitignore files" for your projects.
+
+## 🚩 Python Decouple
+
+💻 To use python decouple in this project, first install it 👇
+```bash
+pip install python-decouple
+```
+
+💻 Go to terminal to update requirements.txt  👇
+```bash
+pip freeze > requirements.txt
+```
+
+✔ Create a new file and name as .env at same level as env folder
+
+✔ Copy your SECRET_KEY from settings.py into this .env file. Don't forget to remove quotation marks and blanks from SECRET_KEY
+
+```
+SECRET_KEY=-)=b-%-w+0_^slb(exmy*mfiaj&wz6_fb4m&s=az-zs!#1^ui7j
+```
+
+✔ Go to settings.py, make amendments below 👇
+
+```python
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')
+```
+## 🚩 INSTALLING DJANGO REST
+
+💻 Go to terminal 👇
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+pip install djangorestframework
+```
+
+✔ Go to settings.py and add 'rest_framework' app to INSTALLED_APPS
+
+## 🚩 PostgreSQL Setup
+💻 To get Python working with Postgres, you will need to install the “psycopg2” module👇
+
+```bash
+pip install psycopg2
+```
+💻 Go to terminal to update requirements.txt  👇
+```bash
+pip freeze > requirements.txt
+```
+✔ Go to settings.py and add '' app to INSTALLED_APPS
+
+## 🚩 Install Swagger
+🔹 Explain a [sample API reference documentation](https://shopify.dev/api)
+
+🔹 Swagger is an open source project launched by a startup in 2010. The goal is to implement a framework that will allow developers to document and design APIs, while maintaining synchronization with the code.
+
+🔹 Developing an API requires orderly and understandable documentation.
+
+🔹 To document and design APIs with Django rest framework we will use drf-yasg which generate real Swagger/Open-API 2.0 specifications from a Django Rest Framework API.
+
+📜 You can find the documentation [here](https://drf-yasg.readthedocs.io/en/stable/readme.html).
+
+### 💻 Go to terminal for installation 👇
+```bash
+pip install drf-yasg
+```
+💻 Go to terminal to update requirements.txt  👇
+```bash
+pip freeze > requirements.txt
+```
+
+✔ Go to settings.py and add 'drf_yasg' app to INSTALLED_APPS
+
+## ✔ Here is the updated urls.py for swagger. In swagger documentation, those patterns are not up-to-date. Modify urls.py 👇
+```python
+from django.contrib import admin
+from django.urls import path
+# Three modules for swagger:
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Flight Reservation API",
+        default_version="v1",
+        description="Flight Reservation API project provides flight and reservation info",
+        terms_of_service="#",
+        contact=openapi.Contact(
+            email="rafe@clarusway.com"),  # Change e-mail on this line!
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    # Url paths for swagger:
+    path("swagger(<format>\.json|\.yaml)",
+         schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0),
+         name="schema-swagger-ui"),
+    path("redoc/", schema_view.with_ui("redoc",
+         cache_timeout=0), name="schemaredoc"),
+]
+```
+
+## 💻 MIGRATE 👇
+```bash
+python manage.py migrate
+```
+## 🚀 RUNSERVER 👇
+```bash
+python manage.py runserver
+```
+
+### ✔ After running the server, go to [swagger page](http://127.0.0.1:8000/swagger/) and [redoc page](http://localhost:8000/redoc/) of your project!
+
+
+## 🚩 INSTALL DEBUG TOOLBAR 👇
+🔹 The Django Debug Toolbar is a configurable set of panels that display various debug information about the current request/response and when clicked, display more details about the panel’s content.
+
+📜 See the Django Debug Toolbar [documentation page](https://django-debug-toolbar.readthedocs.io/en/latest/).
+
+💻 For Installation go to terminal 👇
+```bash
+pip install django-debug-toolbar
+```
+💻 Go to terminal to update requirements.txt  👇
+```bash
+pip freeze > requirements.txt
+```
+
+✔ Go to settings.py and add 'debug_toolbar' app to INSTALLED_APPS
+
+
+## 🚩 Add django-debug-toolbar’s URLs to your project’s URLconf 👇
+```python
+from django.urls import include
+urlpatterns = [
+# ...
+path('__debug__/', include('debug_toolbar.urls')),
+]
+```
+
+## 🚩 Add the middleware to the top 👇
+```python
+MIDDLEWARE = [
+"debug_toolbar.middleware.DebugToolbarMiddleware",
+# ...
+]
+```
+
+## 🚩 Add configuration of internal IPs to "settings.py" 👇
+```python
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+```
+
+## 🔴 SEPERATE DEV AND PROD SETTINGS:
+🔹 When we start to deploy our Djang  application to the server or develop a Django application with the team, settings will be a serious problem.
+
+🔹 There is no built-in universal way to configure Django settings without hardcoding them. But books, open-source and work projects provide a lot of recommendations and approaches on how to do it best. Let’s take a brief look at the most popular ones to examine their weaknesses and strengths.
+
+### 👉 First Solution: Keeping local settings in "settings_local.py
+- This is the oldest method. I used it when I was configuring a Django project on a production server for the first time. I saw a lot of people use it back in the day, and I still see it now. The basic idea of this method is to extend all environment-specific settings in the settings_local.py file, which is ignored by VCS.
+
+    - Pros: Secrets not in VCS.
+
+    - Cons: settings_local.py is not in VCS, so you can lose some of your Django environment settings. The Django settings file is a Python code, so settings_local.py can have some non-obvious logic. You need to have settings_local.example (in VCS) to share the default configurations for developers.
+
+### 👉 Second Solution: Separate settings file for each environment
+🔹 This is an extension of the previous approach. It allows you to keep all configurations in VCS and to share default settings between developers.
+
+🔹 In this case, you make a settings package with the following file structure:
+
+![File_Structure](/file_structure.jpg?raw=true "Title")
+
+## ✔ We prefer the second solution
+
+## 🚩 In the "main" directory, create a new folder named "settings"
+
+- Inside "settings" folder, create;
+    - __init__.py which is the required file to create a python module.
+    - base.py which will include common settings.
+    - dev.py which will include developmend specific settings.
+    - prod.py which will include production specific settings.
+
+## 🚩 Copy all the staff inside settings.py to base.py. And delete  settings.py
+
+## ✔ base.py will be 👇
+```python
+"""
+Django settings for main project.
+Generated by 'django-admin startproject' using Django 4.1.
+For more information on this file, see
+https://docs.djangoproject.com/en/4.1/topics/settings/
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/4.1/ref/settings/
+"""
+from pathlib import Path
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+from decouple import config
+SECRET_KEY = config('SECRET_KEY')
+ALLOWED_HOSTS = []
+
+# Application definition
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    #third party apps:
+    'rest_framework',
+    'drf_yasg',
+    # 'debug_toolbar',
+
+    #myApps:
+]
+MIDDLEWARE = [
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+ROOT_URLCONF = 'main.urls'
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+WSGI_APPLICATION = 'main.wsgi.application'
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+} """
+# Password validation
+# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+# Internationalization
+# https://docs.djangoproject.com/en/4.1/topics/i18n/
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+STATIC_URL = 'static/'
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+```
+
+## ✔ dev.py will be 👇
+```python
+from .base import *
+THIRD_PARTY_APPS = ["debug_toolbar"]
+DEBUG = config("DEBUG")
+INSTALLED_APPS += THIRD_PARTY_APPS
+THIRD_PARTY_MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+MIDDLEWARE += THIRD_PARTY_MIDDLEWARE
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+DATABASES = {
+    "default": {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+INTERNAL_IPS = [
+"127.0.0.1",
+]
+```
+## ✔ prod.py will be 👇
+```python
+from .base import *
+DATABASES = {
+    "default": {
+    "ENGINE": "django.db.backends.postgresql_psycopg2",
+    "NAME": config("SQL_DATABASE"),
+    "USER": config("SQL_USER"),
+    "PASSWORD": config("SQL_PASSWORD"),
+    "HOST": config("SQL_HOST"),
+    "PORT": config("SQL_PORT"),
+    "ATOMIC_REQUESTS": True,
+    }
+}
+```
+
+## ✔ __init__.py will be 👇
+```python
+from .base import *
+env_name = config("ENV_NAME")
+if env_name == "prod":
+    from .prod import *
+elif env_name == "dev":
+    from .dev import *
+```
+
+## ✔ Modify .env file with environment name, postgres and debug variables 👇
+```python
+ENV_NAME=dev
+DEBUG=True
+SQL_DATABASE=flight
+SQL_USER=postgres
+SQL_PASSWORD=postgres
+SQL_HOST=localhost
+SQL_PORT=5432
+```
+## 💻 MIGRATE THE LATEST CHANGES 👇
+```bash
+python manage.py migrate
+```
+
+## 🚩 LOGGING
+🔹 Python programmers will often use print() in their code as a quick and convenient debugging tool. Using the [logging framework](https://docs.djangoproject.com/en/4.0/topics/logging/#logging) is only a little more effort than that, but it’s much more elegant and flexible. As well as being useful for debugging, logging can also provide you with more - and better structured - information about the state and health of your application.
+
+🔹 Django uses and extends Python’s builtin logging module to perform system logging. This module is discussed in detail in Python’s own documentation; this section provides a quick overview.
+
+🔹 A Python logging configuration consists of four parts 👇
+
+- Loggers
+- Handlers
+- Filters
+- Formatters
+
+🔹 Python defines the following log levels 👇
+
+- DEBUG: Low level system information for debugging purposes
+- INFO: General system information
+- WARNING: Information describing a minor problem that has occurred.
+- ERROR: Information describing a major problem that has occurred.
+- CRITICAL: Information describing a critical problem that has occurred.
+
+✔ An example logging setting may be like 👇
+
+```python
+LOGGING = {
+    "version": 1,
+    # is set to True then all loggers from the default configuration will be disabled.
+    "disable_existing_loggers": True,
+    # Formatters describe the exact format of that text of a log record. 
+    "formatters": {
+        "standard": {
+            "format": "[%(levelname)s] %(asctime)s %(name)s: %(message)s"
+        },
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    # The handler is the engine that determines what happens to each message in a logger.
+    # It describes a particular logging behavior, such as writing a message to the screen, 
+    # to a file, or to a network socket.
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+            "level": "ERROR",
+            "stream": "ext://sys.stdout",
+            },
+        'file': {
+            'class': 'logging.FileHandler',
+            "formatter": "verbose",
+            'filename': './debug.log',
+            'level': 'INFO',
+        },
+    },
+    # A logger is the entry point into the logging system.
+    "loggers": {
+        "django": {
+            "handlers": ["console", 'file'],
+            # log level describes the severity of the messages that the logger will handle. 
+            "level": config("DJANGO_LOG_LEVEL", "INFO"),
+            'propagate': True,
+            # If False, this means that log messages written to django.request 
+            # will not be handled by the django logger.
+        },
+    },
+}
+```
+## 📢 Django Settings: Best practices 👇
+- Keep settings in environment variables.
+- Write default values for production configuration (excluding secret keys and tokens).
+- Don’t hardcode sensitive settings, and don’t put them in VCS.
+- Split settings into groups: Django, third-party, project.
+- Follow naming conventions for custom (project) settings.
+
+## ✏ This is the end of initial setup. Send this setup to your Github repo. You can use it in your projects ✏

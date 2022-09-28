@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     # Third party apps:
     'rest_framework',
     'drf_yasg',
-    'debug_toolbar' 
+    #'debug_toolbar' 
 ]
 
 MIDDLEWARE = [
