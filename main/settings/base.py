@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     #myapps
     'users',
+    "flight",
     #'debug_toolbar' 
 ]
 

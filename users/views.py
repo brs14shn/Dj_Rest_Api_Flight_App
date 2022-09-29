@@ -25,11 +25,3 @@ class RegisterView(CreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
-@api_view(['POST'])    
-def logout(request):
-    if request.method == 'POST':
-        request.user.auth_token.delete()
-        data = {
-            'message': 'succesfully logout'
-        }
-        return Response(data)
