@@ -27,7 +27,7 @@ class Passenger(models.Model):
 class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     passenger = models.ManyToManyField(Passenger, related_name='reservations') # parent elemente erişmek için
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='reservations')
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='reservation')
 
 
     # r.passenger.all()
