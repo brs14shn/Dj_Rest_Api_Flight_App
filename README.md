@@ -1,5 +1,7 @@
 # <center> ✈ DJANGO-FLIGHT-PROJECT ✈ </center>
 
+<img src="table.png" />
+
 ## <center> ************************************** </center>
 # <center> 🚀 INITIAL SETUP </center>
 
